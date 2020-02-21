@@ -46,7 +46,7 @@ func ParseBody(body string) (*slack.SlashCommand, error) {
 	return s, nil
 }
 
-func SendMessage(url string, message slack.Message) error {
+func SendMessage(url string, message slack.Msg) error {
 	body, _ := json.Marshal(message)
 
 	log.Printf("Posting %s to %s", body, url)
