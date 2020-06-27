@@ -1,28 +1,25 @@
 package utils
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
-	"fmt"
-	"strings"
-
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/slack-go/slack"
 )
 
-func VerifySecret(request events.APIGatewayProxyRequest, secret string) bool {
-	signature, err := hex.DecodeString(strings.TrimPrefix(request.Headers["X-Slack-Signature"], "v0="))
-	timestamp := request.Headers["X-Slack-Request-Timestamp"]
-	body := request.Body
-
+func VerifySecret(r events.APIGatewayProxyRequest, secret string) bool {
+	verifier, err := slack.NewSecretsVerifier(r.MultiValueHeaders, secret)
 	if err != nil {
 		return false
 	}
 
-	message := fmt.Sprintf("v0:%s:%s", timestamp, body)
-	hash := hmac.New(sha256.New, []byte(secret))
+	_, err = verifier.Write([]byte(r.Body))
+	if err != nil {
+		return false
+	}
 
-	hash.Write([]byte(message))
+	err = verifier.Ensure()
+	if err != nil {
+		return false
+	}
 
-	return hmac.Equal(hash.Sum(nil), []byte(signature))
+	return true
 }

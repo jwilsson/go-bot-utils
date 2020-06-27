@@ -1,21 +1,37 @@
 package utils
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"fmt"
+	"strconv"
 	"testing"
+	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 )
 
 func TestVerifySecret(t *testing.T) {
+	secret := "my secret"
+	body := "command=foo&text=bar"
+	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
+
+	message := fmt.Sprintf("v0:%s:%s", timestamp, body)
+	hash := hmac.New(sha256.New, []byte(secret))
+
+	hash.Write([]byte(message))
+
+	signature := fmt.Sprintf("%x", hash.Sum(nil))
+
 	request := events.APIGatewayProxyRequest{
-		Body: "/command=foo&text=bar",
-		Headers: map[string]string{
-			"X-Slack-Request-Timestamp": "1531420618",
-			"X-Slack-Signature": "v0=f1e1684b07f1ff7b0e09b2dcbeb48b461c20cc7743c7c4955fc537a63e077fda",
+		Body: body,
+		MultiValueHeaders: map[string][]string{
+			"X-Slack-Request-Timestamp": {timestamp},
+			"X-Slack-Signature":         {"v0=" + signature},
 		},
 	}
 
-	got := VerifySecret(request, "my secret")
+	got := VerifySecret(request, secret)
 	if !got {
 		t.Fatal("Expected true, but got false")
 	}
