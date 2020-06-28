@@ -9,9 +9,12 @@ import (
 )
 
 func SendMessage(url string, message slack.Message) error {
-	body, _ := json.Marshal(message)
+	body, err := json.Marshal(message)
+	if err != nil {
+		return err
+	}
 
-	_, err := http.Post(
+	_, err = http.Post(
 		url,
 		"application/json",
 		bytes.NewBuffer(body),
