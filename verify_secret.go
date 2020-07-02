@@ -16,10 +16,5 @@ func VerifySecret(r events.APIGatewayProxyRequest, secret string) bool {
 		return false
 	}
 
-	err = verifier.Ensure()
-	if err != nil {
-		return false
-	}
-
-	return true
+	return verifier.Ensure() == nil
 }
