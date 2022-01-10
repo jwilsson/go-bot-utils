@@ -9,13 +9,7 @@ import (
 
 func setup() *cal.BusinessCalendar {
 	c := cal.NewBusinessCalendar()
-	h := append(se.Holidays, &cal.Holiday{
-		Name:   "Kristi himmelsfärdsdag (fredag)",
-		Offset: 40,
-		Func:   cal.CalcEasterOffset,
-	})
-
-	c.AddHoliday(h...)
+	c.AddHoliday(se.Holidays...)
 
 	return c
 }
