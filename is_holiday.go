@@ -21,11 +21,11 @@ func IsHoliday(t time.Time) bool {
 
 	c := setup()
 
-	if (weekday == "Monday" && !c.IsWorkday(tomorrow)) {
+	if weekday == "Monday" && !c.IsWorkday(tomorrow) {
 		return true
 	}
 
-	if (weekday == "Friday" && !c.IsWorkday(yesterday)) {
+	if weekday == "Friday" && !c.IsWorkday(yesterday) {
 		return true
 	}
 

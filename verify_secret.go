@@ -7,10 +7,10 @@ import (
 	"github.com/slack-go/slack"
 )
 
-func VerifySecret(r events.LambdaFunctionURLRequest, secret string) (bool, error) {
+func VerifySecret(r events.LambdaFunctionURLRequest, secret string) bool {
 	body, err := decodeBody(r)
 	if err != nil {
-		return false, err
+		return false
 	}
 
 	// Expected format of headers differ, so we need to fix it
@@ -21,13 +21,13 @@ func VerifySecret(r events.LambdaFunctionURLRequest, secret string) (bool, error
 
 	verifier, err := slack.NewSecretsVerifier(headers, secret)
 	if err != nil {
-		return false, err
+		return false
 	}
 
 	_, err = verifier.Write([]byte(body))
 	if err != nil {
-		return false, err
+		return false
 	}
 
-	return verifier.Ensure() == nil, nil
+	return verifier.Ensure() == nil
 }

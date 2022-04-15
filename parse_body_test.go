@@ -44,7 +44,7 @@ func TestParseBody(t *testing.T) {
 	}
 
 	request := events.LambdaFunctionURLRequest{
-		Body: base64.StdEncoding.EncodeToString([]byte(values.Encode())),
+		Body:            base64.StdEncoding.EncodeToString([]byte(values.Encode())),
 		IsBase64Encoded: true,
 	}
 

@@ -25,7 +25,7 @@ func TestVerifySecret(t *testing.T) {
 	signature := fmt.Sprintf("%x", hash.Sum(nil))
 
 	request := events.LambdaFunctionURLRequest{
-		Body: base64.StdEncoding.EncodeToString(body),
+		Body:            base64.StdEncoding.EncodeToString(body),
 		IsBase64Encoded: true,
 		Headers: map[string]string{
 			"X-Slack-Request-Timestamp": timestamp,
