@@ -9,7 +9,11 @@ import (
 )
 
 func ParseBody(r events.LambdaFunctionURLRequest) (*slack.SlashCommand, error) {
-	body := decodeBody(r)
+	body, err := decodeBody(r)
+	if err != nil {
+		return nil, err
+	}
+
 	values, err := url.ParseQuery(body)
 	if err != nil {
 		return nil, err
