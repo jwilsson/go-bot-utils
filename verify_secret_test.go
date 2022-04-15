@@ -23,11 +23,11 @@ func TestVerifySecret(t *testing.T) {
 
 	signature := fmt.Sprintf("%x", hash.Sum(nil))
 
-	request := events.APIGatewayProxyRequest{
+	request := events.LambdaFunctionURLRequest{
 		Body: body,
-		MultiValueHeaders: map[string][]string{
-			"X-Slack-Request-Timestamp": {timestamp},
-			"X-Slack-Signature":         {"v0=" + signature},
+		Headers: map[string]string{
+			"X-Slack-Request-Timestamp": timestamp,
+			"X-Slack-Signature":         "v0=" + signature,
 		},
 	}
 
