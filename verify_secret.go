@@ -8,7 +8,7 @@ import (
 )
 
 func VerifySecret(r events.LambdaFunctionURLRequest, secret string) bool {
-	body := decodeBase64(r.Body)
+	body := decodeBody(r)
 
 	// Expected format of headers differ, so we need to fix it
 	headers := http.Header{}

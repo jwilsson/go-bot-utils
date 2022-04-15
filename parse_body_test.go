@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/slack-go/slack"
 )
 
@@ -42,9 +43,12 @@ func TestParseBody(t *testing.T) {
 		"user_name":       []string{"username"},
 	}
 
-	body := base64.StdEncoding.EncodeToString([]byte(values.Encode()))
+	request := events.LambdaFunctionURLRequest{
+		Body: base64.StdEncoding.EncodeToString([]byte(values.Encode())),
+		IsBase64Encoded: true,
+	}
 
-	got, _ := ParseBody(body)
+	got, _ := ParseBody(request)
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("Expected %v, got %v", got, expected)
 	}

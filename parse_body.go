@@ -4,11 +4,12 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/slack-go/slack"
 )
 
-func ParseBody(body string) (*slack.SlashCommand, error) {
-	body = decodeBase64(body)
+func ParseBody(r events.LambdaFunctionURLRequest) (*slack.SlashCommand, error) {
+	body := decodeBody(r)
 	values, err := url.ParseQuery(body)
 	if err != nil {
 		return nil, err
