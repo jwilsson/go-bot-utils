@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/base64"
 	"net/url"
 	"reflect"
 	"testing"
@@ -41,7 +42,9 @@ func TestParseBody(t *testing.T) {
 		"user_name":       []string{"username"},
 	}
 
-	got, _ := ParseBody(values.Encode())
+	body := base64.StdEncoding.EncodeToString([]byte(values.Encode()))
+
+	got, _ := ParseBody(body)
 	if !reflect.DeepEqual(got, expected) {
 		t.Errorf("Expected %v, got %v", got, expected)
 	}

@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/hmac"
 	"crypto/sha256"
+	"encoding/base64"
 	"fmt"
 	"strconv"
 	"testing"
@@ -13,7 +14,7 @@ import (
 
 func TestVerifySecret(t *testing.T) {
 	secret := "my secret"
-	body := "command=foo&text=bar"
+	body := []byte("command=foo&text=bar")
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 
 	message := fmt.Sprintf("v0:%s:%s", timestamp, body)
@@ -24,7 +25,7 @@ func TestVerifySecret(t *testing.T) {
 	signature := fmt.Sprintf("%x", hash.Sum(nil))
 
 	request := events.LambdaFunctionURLRequest{
-		Body: body,
+		Body: base64.StdEncoding.EncodeToString(body),
 		Headers: map[string]string{
 			"X-Slack-Request-Timestamp": timestamp,
 			"X-Slack-Signature":         "v0=" + signature,

@@ -8,6 +8,8 @@ import (
 )
 
 func VerifySecret(r events.LambdaFunctionURLRequest, secret string) bool {
+	body := decodeBase64(r.Body)
+
 	// Expected format of headers differ, so we need to fix it
 	headers := http.Header{}
 	for name, value := range r.Headers {
@@ -19,7 +21,7 @@ func VerifySecret(r events.LambdaFunctionURLRequest, secret string) bool {
 		return false
 	}
 
-	_, err = verifier.Write([]byte(r.Body))
+	_, err = verifier.Write([]byte(body))
 	if err != nil {
 		return false
 	}
