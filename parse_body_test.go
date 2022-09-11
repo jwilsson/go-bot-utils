@@ -11,7 +11,7 @@ import (
 )
 
 func TestParseBody(t *testing.T) {
-	expected := &slack.SlashCommand{
+	expected := slack.SlashCommand{
 		ChannelID:      "C1234ABCD",
 		ChannelName:    "channel",
 		Command:        "/command",

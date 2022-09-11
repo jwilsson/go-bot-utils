@@ -8,24 +8,18 @@ import (
 	"github.com/slack-go/slack"
 )
 
-func ParseBody(r events.LambdaFunctionURLRequest) (*slack.SlashCommand, error) {
+func ParseBody(r events.LambdaFunctionURLRequest) (s slack.SlashCommand, err error) {
 	body, err := decodeBody(r)
 	if err != nil {
-		return nil, err
+		return s, err
 	}
 
 	values, err := url.ParseQuery(body)
 	if err != nil {
-		return nil, err
+		return s, err
 	}
 
-	s, err := slack.SlashCommandParse(&http.Request{
+	return slack.SlashCommandParse(&http.Request{
 		PostForm: values,
 	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &s, nil
 }
