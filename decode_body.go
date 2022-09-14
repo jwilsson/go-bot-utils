@@ -12,9 +12,6 @@ func decodeBody(r events.LambdaFunctionURLRequest) (string, error) {
 	}
 
 	result, err := base64.StdEncoding.DecodeString(r.Body)
-	if err != nil {
-		return "", err
-	}
 
-	return string(result), nil
+	return string(result), err
 }
