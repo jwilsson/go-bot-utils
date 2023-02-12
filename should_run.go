@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -17,7 +18,10 @@ func ShouldRun(currentTime time.Time, targetTime string, timezone string) bool {
 	}
 
 	localHour := currentTime.In(location).Hour()
-	targetHour := strings.Split(targetTime, ":")[0]
+	targetHour, err := strconv.Atoi(strings.Split(targetTime, ":")[0])
+	if err != nil {
+		return false
+	}
 
-	return targetHour == strconv.Itoa(localHour)
+	return fmt.Sprintf("%01d", targetHour) == strconv.Itoa(localHour)
 }
