@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -23,5 +22,5 @@ func ShouldRun(currentTime time.Time, targetTime string, timezone string) bool {
 		return false
 	}
 
-	return fmt.Sprintf("%01d", targetHour) == strconv.Itoa(localHour)
+	return targetHour == localHour
 }
