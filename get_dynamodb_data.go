@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
-func GetDynamodbData(cfg aws.Config, ctx context.Context, tableName string, out interface{}) error {
+func GetDynamodbData(ctx context.Context, cfg aws.Config, tableName string, out interface{}) error {
 	svc := dynamodb.NewFromConfig(cfg)
 	result, err := svc.Scan(ctx, &dynamodb.ScanInput{
 		TableName: aws.String(tableName),
