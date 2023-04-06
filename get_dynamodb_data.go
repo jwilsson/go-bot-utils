@@ -1,15 +1,16 @@
 package utils
 
 import (
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"context"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
-func GetDynamodbData(session *session.Session, tableName string, out interface{}) error {
-	svc := dynamodb.New(session)
-	result, err := svc.Scan(&dynamodb.ScanInput{
+func GetDynamodbData(cfg aws.Config, ctx context.Context, tableName string, out interface{}) error {
+	svc := dynamodb.NewFromConfig(cfg)
+	result, err := svc.Scan(ctx, &dynamodb.ScanInput{
 		TableName: aws.String(tableName),
 	})
 
@@ -17,5 +18,5 @@ func GetDynamodbData(session *session.Session, tableName string, out interface{}
 		return err
 	}
 
-	return dynamodbattribute.UnmarshalListOfMaps(result.Items, &out)
+	return attributevalue.UnmarshalListOfMaps(result.Items, out)
 }
