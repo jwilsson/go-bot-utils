@@ -19,7 +19,7 @@ func GetDynamodbData[T any](ctx context.Context, cfg aws.Config, tableName strin
 	}
 
 	items := make([]T, result.Count)
-	err = attributevalue.UnmarshalListOfMaps(result.Items, items)
+	err = attributevalue.UnmarshalListOfMaps(result.Items, &items)
 
 	return items, err
 }
