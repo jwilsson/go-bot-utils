@@ -1,6 +1,6 @@
 module github.com/jwilsson/go-bot-utils
 
-go 1.19
+go 1.26
 
 require (
 	github.com/aws/aws-lambda-go v1.34.1
